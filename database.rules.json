@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "schools": {
+      "$code": {
+        ".read": "auth != null",
+
+        "data":                { ".write": "auth != null" },
+        "marks":               { ".write": "auth != null" },
+        "parentLoginAttempts": { ".write": "auth != null" },
+
+        "sms": { ".write": false }
+      }
+    },
+    "admins": {
+      "$uid": {
+        ".read":  "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}
