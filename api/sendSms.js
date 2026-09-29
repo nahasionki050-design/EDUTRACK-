@@ -1,5 +1,5 @@
 /**
- * EduTrack CBC — SMS backend for Vercel (hardened for production).
+ * EduTrack CBC â€” SMS backend for Vercel (hardened for production).
  *
  * Request shapes (JSON POST):
  *   School send      { schoolCode, recipients:[{phone,message}] }
@@ -13,7 +13,7 @@
  * Response: { ok:true, sent, failed, failedNumbers, creditsUsed, newBalance? } | { ok:true, newBalance, duplicate? } | { ok:false, error }
  *
  * CREDIT WALLET: schools/{code}/sms/credits in Realtime Database. Database rules make that node
- * read-only for browsers; ONLY this function (Admin SDK) changes it — sends, refunds and top-ups.
+ * read-only for browsers; ONLY this function (Admin SDK) changes it â€” sends, refunds and top-ups.
  *
  * Secrets and settings come from Vercel Environment Variables (see .env.example).
  */
@@ -85,8 +85,8 @@ function isValidPhone(n) {
   return /^\+\d{8,15}$/.test(n);
 }
 const GSM7_BASIC =
-  "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà";
-const GSM7_EXT = "^{}\\[~]|€";
+  "@Â£$Â¥Ã¨Ã©Ã¹Ã¬Ã²Ã‡\nÃ˜Ã¸\rÃ…Ã¥Î”_Î¦Î“Î›Î©Î Î¨Î£Î˜ÎžÃ†Ã¦ÃŸÃ‰ !\"#Â¤%&'()*+,-./0123456789:;<=>?Â¡ABCDEFGHIJKLMNOPQRSTUVWXYZÃ„Ã–Ã‘ÃœÂ§Â¿abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã±Ã¼Ã ";
+const GSM7_EXT = "^{}\\[~]|â‚¬";
 function segments(text) {
   text = text || "";
   let units = 0, unicode = false;
@@ -234,6 +234,7 @@ async function sendGroup(numbers, message) {
     const text = await r.text();
     let data = {};
     try { data = JSON.parse(text); } catch (e) { /* non-JSON error page */ }
+    console.log("AT raw response", r.status, text.slice(0, 500));
     if (!r.ok && !(data.SMSMessageData)) console.error("Africa's Talking HTTP", r.status, text.slice(0, 200));
     const recips = (data.SMSMessageData && data.SMSMessageData.Recipients) || [];
     recips.forEach((x) => { results[normalizePhone(x.number)] = { ok: x.status === "Success", status: x.status }; });
