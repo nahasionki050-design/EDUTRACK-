@@ -234,7 +234,6 @@ async function sendGroup(numbers, message) {
     const text = await r.text();
     let data = {};
     try { data = JSON.parse(text); } catch (e) { /* non-JSON error page */ }
-    console.log("AT raw response", r.status, text.slice(0, 500));
     if (!r.ok && !(data.SMSMessageData)) console.error("Africa's Talking HTTP", r.status, text.slice(0, 200));
     const recips = (data.SMSMessageData && data.SMSMessageData.Recipients) || [];
     recips.forEach((x) => { results[normalizePhone(x.number)] = { ok: x.status === "Success", status: x.status }; });
